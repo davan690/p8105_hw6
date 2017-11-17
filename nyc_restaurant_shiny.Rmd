@@ -6,7 +6,6 @@ date: "2017/11/15"
 output: 
   flexdashboard::flex_dashboard:
     orientation: row
-  runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
@@ -18,10 +17,11 @@ library(stringr)
 library(forcats)
 library(plotly)
 library(shiny)
+
 ```
 
 ```{r}
-#read and clean data
+#read, clean data and sample
 nyc_inspections <- 
   read_csv("../data/DOHMH_New_York_City_Restaurant_Inspection_Results.csv.gz", 
                            col_types = cols(building = col_character()),
@@ -31,7 +31,7 @@ nyc_inspections <-
          boro != "Missing") %>% 
   mutate(inspection_num = row_number(),
          boro = str_to_title(boro)) %>% 
-  select(inspection_num, boro, grade, score, critical_flag, cuisine_description)
+  select(inspection_num, boro, grade, score, critical_flag, cuisine_description) 
 ```
 
 
