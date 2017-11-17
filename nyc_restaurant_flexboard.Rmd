@@ -1,6 +1,6 @@
 ---
-title: "nyc_restaurant_flexboard"
-author: "Mengqi Zhu"
+title: "P8105 Homework 6: NYC Restaurant Flexboard"
+author: "Mengqi Zhu (mz2662) & Pengfei Jiang (pj2325)"
 date: "November 13, 2017"
 output: 
   flexdashboard::flex_dashboard:
@@ -36,7 +36,7 @@ nyc_inspections <-
 Column {data-width=500}
 -----------------------------------------------------------------------
 
-### Chart A
+### Grade A Percentage vs Average Score ScatterPlot
 
 ```{r, chunk2, message = FALSE, warning = FALSE}
 nyc_inspections %>%
@@ -59,7 +59,7 @@ nyc_inspections %>%
 Column {data-width=450}
 -----------------------------------------------------------------------
 
-### Chart B
+### Boxplot of Scores
 
 ```{r, chunk3}
 
@@ -77,7 +77,7 @@ nyc_inspections %>%
   plot_ly(y = ~score, color = ~cuisine_description, type = "box", colors = "Set2")
 ```
 
-### Chart C
+### Bar-plot for Average Scores by Cuisine
 
 ```{r, chunk4, message = FALSE, warning =FALSE}
 nyc_inspections %>%

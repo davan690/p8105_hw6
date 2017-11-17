@@ -1,7 +1,7 @@
 
 ---
-title: "nyc_restaurant_shiny"
-author: "Mengqi Zhu"
+title: "P8105 Homework 6: NYC Restaurant Shiny"
+author: "Mengqi Zhu (mz2662) & Pengfei Jiang (pj2325)"
 date: "2017/11/15"
 output: 
   flexdashboard::flex_dashboard:
@@ -10,7 +10,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 library(flexdashboard)
 library(tidyverse)
 library(janitor)
@@ -51,10 +51,22 @@ radioButtons("boro_choice", label = h3("Select boro"),
 
 
 #sliderInput widget
-max_A_pecent <- 1
-min_A_percent <- 0
-sliderInput("pecent_A", label = h3("Choose A% range"), 
-            min = min_A_percent, max = max_A_pecent, value = c(0.2, 0.8))
+#max_A_pecent <- 1
+#min_A_percent <- 0
+#sliderInput("pecent_A", label = h3("Choose A% range"), 
+#            min = min_A_percent, max = max_A_pecent, value = c(0.2, 0.8))
+
+#max_score = nyc_inspections %>% distinct(score) %>% na.omit %>% max()
+#min_score = nyc_inspections %>% distinct(score) %>% na.omit %>% min()
+
+# sliderInput widget
+#sliderInput("score_range", label = h3("Choose score range"), min = min_score, 
+#        max = max_score, value = c(20, 60))
+
+#selectInput widget
+selectInput("select_critical_flag", label = h3("Select critical flag"), 
+    choices = list("Critical" = "Critical", "Not Critical" = "Not Critical", "Not Applicable" = "Not Applicable"), 
+    selected = "Critical")
 
 ```
 
@@ -62,19 +74,21 @@ sliderInput("pecent_A", label = h3("Choose A% range"),
 Row
 -----------------------------------------------------------------------
 
-### Chart A
+### Grade A Percentage vs Average Score ScatterPlot
 
 ```{r, chartA}
 renderPlotly({
   nyc_inspections %>%
-  group_by(boro, cuisine_description) %>%
+  group_by(boro, cuisine_description, critical_flag) %>%
   summarise(aver_score = mean(score),
             num_inspections = n(),
             A_num = sum(grade == "A"),
             A_percent = sum(grade == "A")/n(),
             critaical_percent = sum(grade == "A")/n()) %>%
-  filter(boro == input$boro_choice, 
-         A_percent %in% input$pecent_A[1]:input$pecent_A[2]) %>%
+    filter(boro == input$boro_choice, 
+         #score %in% input$score_range[1]:input$score_range[2]) %>%
+         #A_percent %in% input$pecent_A[1]:input$pecent_A[2]) %>%
+         critical_flag == input$select_critical_flag) %>%
   mutate(text_label = str_c("Boro: ", boro, '\nCuisine: ', cuisine_description, 
                             '\nnumber of inspection:', num_inspections, '\nnumber of A:', A_num,
                             '\n A%:', paste(round(A_percent*100,digits = 2),"%",sep = "")), 
@@ -87,7 +101,7 @@ renderPlotly({
 Row {.tabset .tabset-fade}
 -----------------------------------------------------------------------
 
-### Chart B
+### Boxplot of Scores
 
 ```{r, chartB}
 renderPlotly({
@@ -100,17 +114,18 @@ cuisine_boxplot <-
   pull(cuisine_description)
 nyc_inspections %>%
   filter(boro == input$boro_choice,
-         cuisine_description %in% cuisine_boxplot) %>%
+         cuisine_description %in% cuisine_boxplot,
+         critical_flag == input$select_critical_flag) %>%
   plot_ly(y = ~score, color = ~cuisine_description, type = "box", colors = "Set2")
 })
 ```
 
-### Chart C
+### Bar-plot for Average Scores by Cuisine
 
 ```{r, chartC}
 renderPlotly({
   nyc_inspections %>%
-  group_by(boro, cuisine_description) %>%
+  group_by(boro, cuisine_description, critical_flag) %>%
   summarise(aver_score = mean(score),
             num_inspections = n(),
             A_num = sum(grade == "A"),
@@ -120,8 +135,10 @@ renderPlotly({
                             '\nnumber of inspection:', num_inspections, '\nnumber of A:', A_num,
                             '\n A%:', paste(round(A_percent*100, digits = 2),"%",sep = "")), 
                             '\n critical%:', paste(round(critaical_percent*100, digits = 2),"%",sep = "")) %>%
-  filter(boro == "Manhattan",
-         A_percent %in% input$pecent_A[1]:input$pecent_A[2]) %>%
+  filter(boro == input$boro_choice, 
+         #score %in% input$score_range[1]:input$score_range[2]) %>%
+         #A_percent %in% input$pecent_A[1]:input$pecent_A[2]) %>%
+         critical_flag == input$select_critical_flag) %>%
   plot_ly(x = ~cuisine_description, y = ~aver_score, color = ~cuisine_description, type = "bar", text = ~text_label) %>%
   layout(showlegend = FALSE)
 })
