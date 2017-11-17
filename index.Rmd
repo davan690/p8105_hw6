@@ -30,12 +30,12 @@ In the bar-plot,
 
 
 
-1: Here is our [**dashboard**](nyc_restaurant_flexboard.html)
+1: Here is our [**Dashboard**](nyc_restaurant_flexboard.html)
 
-2: Here is our [**Shiny webpage**](https://pengfeijiang.shinyapps.io/nyc_restaurant_shiny/)
+2: Here is our [**Shiny Webpage**](https://pengfeijiang.shinyapps.io/nyc_restaurant_shiny/)
 
-3: Here is our [**repository**](https://github.com/WendyThe13th/p8105_hw6)
+3: Here is our [**Main Repository**](https://github.com/WendyThe13th/p8105_hw6)
 
-
+4: Here is our [**Shiny Repository**](https://github.com/pengfeijiang/p8105_hw6_mz2662_pj2325_shiny)
  
 
