@@ -16,6 +16,8 @@ library(janitor)
 library(stringr)
 library(plotly)
 library(flexdashboard)
+library(RColorBrewer)
+
 ```
 
 
@@ -39,6 +41,9 @@ Column {data-width=500}
 ### Grade A Percentage vs Average Score ScatterPlot
 
 ```{r, chunk2, message = FALSE, warning = FALSE}
+colourCount = length(unique(nyc_inspections$inspection_num))
+getPalette = colorRampPalette(brewer.pal(9, "Set1"))
+
 nyc_inspections %>%
   group_by(boro, cuisine_description) %>%
   summarise(aver_score = mean(score),
@@ -62,6 +67,8 @@ Column {data-width=450}
 ### Boxplot of Scores
 
 ```{r, chunk3}
+colourCount = length(unique(nyc_inspections$inspection_num))
+getPalette = colorRampPalette(brewer.pal(9, "Set1"))
 
 cuisine_boxplot <-
   nyc_inspections %>%
